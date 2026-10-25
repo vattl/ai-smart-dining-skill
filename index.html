@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f4ed" />
+  <title>串局 · AI 点餐</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">串</span><div><strong>串局</strong><small>深圳烧烤 · AI 点餐</small></div></div>
+      <div class="top-actions">
+        <button type="button" id="historyToggleBtn" class="history-toggle-btn" aria-label="查看历史会话">
+          💬 历史 <span id="historyCountBadge" class="history-count-badge">0</span>
+        </button>
+        <button type="button" id="newChatBtn" class="new-chat-btn" aria-label="新建对话">
+          ➕ 新对话
+        </button>
+        <span class="connection-dot"></span><span id="connectionText">已准备好</span>
+      </div>
+    </header>
+    <main class="mobile-main">
+      <section class="welcome-card">
+        <div class="welcome-kicker">AI 智能点餐 · 试点门店 #3</div>
+        <h1>想吃什么，<em>直接告诉我</em></h1>
+        <p>不用选菜单、不用填复杂表格。说出人数、预算和忌口，我帮你配好这一桌。</p>
+      </section>
+
+      <section class="chat-card">
+        <div id="chatMessages" class="chat-messages" aria-live="polite">
+          <div class="chat-message assistant"><div class="chat-avatar">AI</div><div class="chat-bubble">你好！告诉我你们几个人、预算多少，有没有不吃辣、过敏或忌口？</div></div>
+        </div>
+        <div class="chat-compose"><textarea id="prompt" rows="2" placeholder="例如：3个人，预算200元，1人不吃辣，想吃得均衡"></textarea><button type="button" id="sendBtn" class="send-button" aria-label="发送">↑</button></div>
+        <div class="quick-actions"><button type="button" class="chat-quick" data-prompt="我们3个人，预算200元，1人不吃辣，推荐均衡烧烤">3人均衡餐</button><button type="button" class="chat-quick" data-prompt="4个人，预算150元，想吃得饱，其中1人不吃辣">预算吃饱</button><button type="button" class="chat-quick" data-prompt="2个人，预算100元，想高蛋白、少油">高蛋白少油</button></div>
+        <div class="chat-save-bar" id="saveIndicator">
+          <span class="save-dot"></span>
+          <span id="saveIndicatorText">本地会话已实时同步 · 刷新页面不丢失</span>
+        </div>
+      </section>
+
+      <section class="status-line"><span class="status-check">✓</span><span>Skill 已内置 · 自动读取真实菜单 · 预测试不下单</span></section>
+
+      <section class="panel result-panel" id="resultPanel">
+        <div class="section-heading"><div><span class="section-kicker">YOUR PLAN</span><h2>配餐方案</h2></div><span id="resultStatus" class="badge muted">等待输入</span></div>
+        <div id="resultContent" class="empty-state"><strong>方案会显示在这里</strong><p>发送需求后，AI 会从 #3 门店实时菜单中计算方案。</p></div>
+      </section>
+
+      <section class="panel confirm-panel"><div class="section-heading"><div><span class="section-kicker">SAFE MODE</span><h2>预测试模式</h2></div><span class="badge warning">不提交订单</span></div><p>当前只演示真实菜单读取、智能配餐和校价流程，不会创建真实订单。</p><div class="confirm-actions"><button class="secondary-action" id="draftBtn" disabled>校验订单草稿</button><button class="primary-action compact" id="submitBtn" disabled>确认下单</button></div></section>
+
+      <details class="debug-details"><summary>连接诊断</summary><section class="debug-panel" id="mcpDebugPanel"><div class="debug-toolbar"><button class="secondary-action" id="discoverMcpBtn">发现工具</button><select id="mcpToolSelect"><option value="">请先发现工具</option></select><button class="secondary-action" id="callMcpBtn" disabled>调用</button></div><textarea id="mcpArguments" rows="3">{"shop_id":3}</textarea><div class="debug-meta"><span id="mcpStatus" class="badge muted">未检测</span><span id="mcpLatency">耗时 —</span><span id="mcpHttpStatus">HTTP —</span></div><pre id="mcpOutput">需要排查时再展开。</pre></section></details>
+    </main>
+  </div>
+
+  <!-- History Drawer -->
+  <div id="historyDrawerBackdrop" class="history-drawer-backdrop" aria-hidden="true"></div>
+  <aside id="historyDrawer" class="history-drawer" aria-label="历史对话抽屉" aria-hidden="true">
+    <div class="history-drawer-header">
+      <div class="history-drawer-title">
+        <span>💬 历史对话</span>
+        <span id="historyDrawerBadge" class="history-drawer-count">0</span>
+      </div>
+      <button type="button" id="historyCloseBtn" class="history-drawer-close" aria-label="关闭抽屉">✕</button>
+    </div>
+    <div class="history-drawer-actions">
+      <button type="button" id="drawerNewChatBtn" class="drawer-action-btn primary">➕ 新建对话</button>
+      <button type="button" id="clearAllHistoryBtn" class="drawer-action-btn danger">🗑️ 清空历史</button>
+    </div>
+    <div id="historyList" class="history-list">
+      <!-- Dynamic session cards inserted here -->
+    </div>
+  </aside>
+
+  <script src="./app.js"></script>
+</body>
+</html>

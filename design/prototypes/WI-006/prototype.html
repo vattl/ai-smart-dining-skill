@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>UI 原型 · 大模型列表智能美化展示 (WI-006)</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .proto-container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+      font-family: Manrope, system-ui, sans-serif;
+    }
+    .proto-header {
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e5ded2;
+      padding-bottom: 16px;
+    }
+    .proto-badge {
+      display: inline-block;
+      background: #203c32;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .proto-title {
+      font-size: 24px;
+      color: #203c32;
+      margin: 0 0 8px;
+    }
+    .proto-desc {
+      color: #65746b;
+      font-size: 13px;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .proto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 820px) {
+      .proto-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .proto-column {
+      background: #fffdf9;
+      border: 1px solid #e9e0d4;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(74, 58, 38, 0.05);
+    }
+    .proto-col-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #203c32;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee5da;
+    }
+    .proto-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .proto-tag.legacy { background: #fbebe8; color: #c35e35; }
+    .proto-tag.target { background: #e3f2e7; color: #203c32; }
+
+    /* New List Beautification Component Styles */
+    .ai-list-card {
+      margin: 8px 0 4px;
+      background: #ffffff;
+      border: 1px solid #ebd9c8;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(60, 40, 20, 0.04);
+    }
+    .ai-list-category {
+      background: #fbf7f0;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #8c532b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid #f2e7dc;
+    }
+    .ai-list-category-icon {
+      font-size: 13px;
+    }
+    .ai-list-items {
+      display: flex;
+      flex-direction: column;
+    }
+    .ai-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #f7efe6;
+      transition: background 0.15s ease;
+      position: relative;
+    }
+    .ai-list-item:last-child {
+      border-bottom: 0;
+    }
+    .ai-list-item:hover, .ai-list-item:active {
+      background: #fdfaf5;
+    }
+    .ai-list-num {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border-radius: 50%;
+      background: #203c32;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      margin-top: 1px;
+    }
+    .ai-list-bullet {
+      width: 7px;
+      height: 7px;
+      min-width: 7px;
+      border-radius: 50%;
+      background: #c35e35;
+      margin-top: 8px;
+      margin-left: 6px;
+      margin-right: 6px;
+    }
+    .ai-list-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .ai-list-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .ai-list-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #26322d;
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .ai-tag-pill {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 4px;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .ai-tag-pill.tag-mint {
+      background: #e3f3e8;
+      color: #2e7347;
+      border: 1px solid #c9e8d2;
+    }
+    .ai-tag-pill.tag-orange {
+      background: #feede3;
+      color: #b55627;
+      border: 1px solid #fad2bc;
+    }
+    .ai-tag-pill.tag-gold {
+      background: #fcf4df;
+      color: #946c15;
+      border: 1px solid #fae6b2;
+    }
+    .ai-tag-pill.tag-spec {
+      background: #f1ede6;
+      color: #6d685e;
+      font-weight: 500;
+    }
+    .ai-list-price {
+      font-size: 13px;
+      font-weight: 800;
+      color: #c35e35;
+      white-space: nowrap;
+    }
+    .ai-list-desc {
+      font-size: 11px;
+      color: #79837a;
+      line-height: 1.5;
+      margin-top: 3px;
+    }
+    .ai-list-action-hint {
+      display: block;
+      padding: 6px 12px;
+      background: #faf7f2;
+      border-top: 1px solid #f2e7dc;
+      font-size: 10px;
+      color: #928a7e;
+      text-align: right;
+    }
+    .ai-msg-intro, .ai-msg-outro {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #37443d;
+    }
+    .ai-msg-intro {
+      margin-bottom: 6px;
+    }
+    .ai-msg-outro {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #67756e;
+      background: rgba(89, 168, 117, 0.08);
+      padding: 8px 10px;
+      border-radius: 8px;
+      border-left: 3px solid #59a875;
+    }
+  </style>
+</head>
+<body style="background: #f7f4ed; margin: 0; padding: 0;">
+  <div class="proto-container">
+    <div class="proto-header">
+      <span class="proto-badge">UI 原型验证</span>
+      <h1 class="proto-title">大模型返回列表智能美化原型展示</h1>
+      <p class="proto-desc">
+        目标：自动识别大模型在对话气泡中返回的有序编号、无序项目、菜品属性（价格、规格、免辣/招牌标签）、分类小标题，并转化为消费端高亲和力、直观易读的美化卡片，彻底消除密集纯文本换行痛点。
+      </p>
+    </div>
+
+    <div class="proto-grid">
+      <!-- 改造前对比 -->
+      <div class="proto-column">
+        <div class="proto-col-title">
+          <span>改造前：纯文本密集换行 (Legacy)</span>
+          <span class="proto-tag legacy">现状</span>
+        </div>
+        <div class="chat-messages" style="max-height: none; min-height: auto;">
+          <div class="chat-message assistant">
+            <div class="chat-avatar">AI</div>
+            <div class="chat-bubble">
+              为你推荐以下适合3人且兼顾不吃辣的均衡烧烤搭配：<br>
+              1. 招牌牛肉串 (10串) - ¥35 [招牌]：黄牛肉现烤，鲜香多汁<br>
+              2. 蜜汁烤鸡翅 (4串) - ¥24 [免辣推荐]：蜜汁甜咸适口，完全不辣<br>
+              3. 炭烤大生蚝 (4只) - ¥32：蒜蓉原味烤，鲜美多汁<br>
+              4. 锡纸金针菇 (1份) - ¥16 [免辣]：蒜香浓郁，解腻开胃<br>
+              5. 烤茄子 (1条) - ¥15：肉厚味浓，免辣调味<br>
+              6. 冰镇酸梅汤 (1扎) - ¥18：古法熬制解腻爽口<br>
+              整单总计约 ¥140，已充分保障不吃辣成员的荤素选择！
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 改造后展示 -->
+      <div class="proto-column">
+        <div class="proto-col-title">
+          <span>改造后：智能识别美化卡片 (Target)</span>
+          <span class="proto-tag target">目标实现</span>
+        </div>
+        <div class="chat-messages" style="max-height: none; min-height: auto;">
+          <div class="chat-message assistant">
+            <div class="chat-avatar">AI</div>
+            <div class="chat-bubble" style="width: 100%;">
+              <div class="ai-msg-intro">为你推荐以下适合3人且兼顾不吃辣的均衡烧烤搭配：</div>
+              
+              <div class="ai-list-card">
+                <div class="ai-list-category">
+                  <span class="ai-list-category-icon">🔥</span>
+                  <span>推荐菜品搭配清单 (6品)</span>
+                </div>
+                <div class="ai-list-items">
+                  <div class="ai-list-item">
+                    <span class="ai-list-num">1</span>
+                    <div class="ai-list-content">
+                      <div class="ai-list-title-row">
+                        <span class="ai-list-title">
+                          招牌牛肉串
+                          <span class="ai-tag-pill tag-spec">10串</span>
+                          <span class="ai-tag-pill tag-orange">招牌</span>
+                        </span>
+                        <span class="ai-list-price">¥35</span>
+                      </div>
+                      <div class="ai-list-desc">黄牛肉现烤，鲜香多汁</div>
+                    </div>
+                  </div>
+
+                  <div class="ai-list-item">
+                    <span class="ai-list-num">2</span>
+                    <div class="ai-list-content">
+                      <div class="ai-list-title-row">
+                        <span class="ai-list-title">
+                          蜜汁烤鸡翅
+                          <span class="ai-tag-pill tag-spec">4串</span>
+                          <span class="ai-tag-pill tag-mint">免辣推荐</span>
+                        </span>
+                        <span class="ai-list-price">¥24</span>
+                      </div>
+                      <div class="ai-list-desc">蜜汁甜咸适口，完全不辣</div>
+                    </div>
+                  </div>
+
+                  <div class="ai-list-item">
+                    <span class="ai-list-num">3</span>
+                    <div class="ai-list-content">
+                      <div class="ai-list-title-row">
+                        <span class="ai-list-title">
+                          炭烤大生蚝
+                          <span class="ai-tag-pill tag-spec">4只</span>
+                        </span>
+                        <span class="ai-list-price">¥32</span>
+                      </div>
+                      <div class="ai-list-desc">蒜蓉原味烤，鲜美多汁</div>
+                    </div>
+                  </div>
+
+                  <div class="ai-list-item">
+                    <span class="ai-list-num">4</span>
+                    <div class="ai-list-content">
+                      <div class="ai-list-title-row">
+                        <span class="ai-list-title">
+                          锡纸金针菇
+                          <span class="ai-tag-pill tag-spec">1份</span>
+                          <span class="ai-tag-pill tag-mint">免辣</span>
+                        </span>
+                        <span class="ai-list-price">¥16</span>
+                      </div>
+                      <div class="ai-list-desc">蒜香浓郁，解腻开胃</div>
+                    </div>
+                  </div>
+
+                  <div class="ai-list-item">
+                    <span class="ai-list-num">5</span>
+                    <div class="ai-list-content">
+                      <div class="ai-list-title-row">
+                        <span class="ai-list-title">
+                          烤茄子
+                          <span class="ai-tag-pill tag-spec">1条</span>
+                        </span>
+                        <span class="ai-list-price">¥15</span>
+                      </div>
+                      <div class="ai-list-desc">肉厚味浓，免辣调味</div>
+                    </div>
+                  </div>
+
+                  <div class="ai-list-item">
+                    <span class="ai-list-num">6</span>
+                    <div class="ai-list-content">
+                      <div class="ai-list-title-row">
+                        <span class="ai-list-title">
+                          冰镇酸梅汤
+                          <span class="ai-tag-pill tag-spec">1扎</span>
+                        </span>
+                        <span class="ai-list-price">¥18</span>
+                      </div>
+                      <div class="ai-list-desc">古法熬制解腻爽口</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ai-list-action-hint">轻触菜品可快捷引用沟通 · 真实菜品以门店实时菜单为准</div>
+              </div>
+
+              <div class="ai-msg-outro">
+                💡 <strong>贴心建议</strong>：已为您整单核算约 ¥140，充分保障不吃辣成员的荤素选择！
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

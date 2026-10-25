@@ -1,0 +1,18 @@
+{
+  "prototype": "design/prototypes/WI-007/prototype.png",
+  "production": "design/prototypes/WI-007/production.png",
+  "prototype_size": [
+    980,
+    1100
+  ],
+  "production_size": [
+    980,
+    1100
+  ],
+  "dimensions_match": true,
+  "changed_pixels": 0,
+  "total_pixels": 1078000,
+  "changed_pixel_ratio": 0.0,
+  "diff_bbox": null,
+  "note": "Zero visual fidelity delta. Production implementation aligns with approved prototype specification."
+}

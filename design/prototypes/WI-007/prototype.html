@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>UI 原型 · H5 聊天对话页面加大与手机端适配 (WI-007)</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .proto-container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+      font-family: Manrope, system-ui, sans-serif;
+    }
+    .proto-header {
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e5ded2;
+      padding-bottom: 16px;
+    }
+    .proto-badge {
+      display: inline-block;
+      background: #203c32;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .proto-title {
+      font-size: 24px;
+      color: #203c32;
+      margin: 0 0 8px;
+    }
+    .proto-desc {
+      color: #65746b;
+      font-size: 13px;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .proto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 820px) {
+      .proto-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .proto-phone-frame {
+      background: #fffdf9;
+      border: 1px solid #e9e0d4;
+      border-radius: 28px;
+      padding: 16px 14px;
+      box-shadow: 0 12px 36px rgba(74, 58, 38, 0.08);
+      max-width: 420px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .proto-col-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #203c32;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee5da;
+    }
+    .proto-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .proto-tag.legacy { background: #fbebe8; color: #c35e35; }
+    .proto-tag.target { background: #e3f2e7; color: #203c32; }
+
+    /* Target enlarged mobile chat styles */
+    .target-welcome-card {
+      padding: 10px 4px 8px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid #f0e8dc;
+      margin-bottom: 10px;
+    }
+    .target-welcome-card h1 {
+      font-size: 17px;
+      margin: 0;
+      color: #21362d;
+      font-weight: 800;
+    }
+    .target-welcome-card h1 em {
+      color: #c35e35;
+      font-style: normal;
+    }
+    .target-welcome-card p {
+      font-size: 11px;
+      color: #7d857c;
+      margin: 0;
+    }
+    .target-chat-card {
+      padding: 12px 10px;
+      border-radius: 20px;
+      background: #fffdf9;
+      border: 1px solid #e9e0d4;
+    }
+    .target-chat-messages {
+      min-height: 480px;
+      max-height: 66vh;
+      overflow-y: auto;
+      padding: 6px 2px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .target-chat-bubble {
+      max-width: 92%;
+      font-size: 14px;
+      line-height: 1.65;
+      padding: 12px 14px;
+    }
+  </style>
+</head>
+<body style="background: #f7f4ed; margin: 0; padding: 0;">
+  <div class="proto-container">
+    <div class="proto-header">
+      <span class="proto-badge">UI 原型验证</span>
+      <h1 class="proto-title">H5 聊天对话页面加大与手机端适配对比</h1>
+      <p class="proto-desc">
+        目标：显著扩大对话视窗（由 320px/55vh 扩展到 480px/66vh），气泡可用宽度延展至 92%，顶部引导紧凑化，在移动端（375px~430px）提供沉浸式 AI 点餐沟通体验。
+      </p>
+    </div>
+
+    <div class="proto-grid">
+      <!-- 现状：小聊天窗口 + 顶部大占位 -->
+      <div class="proto-phone-frame">
+        <div class="proto-col-title">
+          <span>改造前：聊天窗口偏小 (Legacy)</span>
+          <span class="proto-tag legacy">高度受限 320px</span>
+        </div>
+        <div class="welcome-card" style="padding: 16px 2px 14px;">
+          <div class="welcome-kicker" style="font-size: 9px;">AI 智能点餐 · 试点门店 #3</div>
+          <h1 style="font-size: 24px; margin: 6px 0 6px;">想吃什么，<em>直接告诉我</em></h1>
+          <p style="font-size: 12px; line-height: 1.5;">不用选菜单、不用填复杂表格。说出人数、预算和忌口，我帮你配好这一桌。</p>
+        </div>
+        <div class="chat-card" style="padding: 12px;">
+          <div class="chat-messages" style="min-height: 280px; max-height: 300px; overflow: hidden;">
+            <div class="chat-message assistant">
+              <div class="chat-avatar">AI</div>
+              <div class="chat-bubble" style="max-width: 84%; font-size: 13px;">你好！告诉我你们几个人、预算多少？</div>
+            </div>
+            <div class="chat-message user">
+              <div class="chat-avatar">我</div>
+              <div class="chat-bubble" style="max-width: 84%; font-size: 13px;">3个人200元，1人不吃辣</div>
+            </div>
+            <div class="chat-message assistant">
+              <div class="chat-avatar">AI</div>
+              <div class="chat-bubble" style="max-width: 84%; font-size: 13px; color: #888;">
+                [内容已截断，需小窗口滑动...]
+              </div>
+            </div>
+          </div>
+          <div class="chat-compose" style="padding-top: 8px;">
+            <textarea rows="2" style="font-size: 13px; min-height: 48px;" placeholder="输入点餐需求..."></textarea>
+            <button class="send-button" style="width: 46px; height: 48px; font-size: 20px;">↑</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 目标：加大对话区域 + 手机端全宽适配 -->
+      <div class="proto-phone-frame">
+        <div class="proto-col-title">
+          <span>改造后：超大沉浸式聊天区 (Target)</span>
+          <span class="proto-tag target">扩大至 480px / 66vh</span>
+        </div>
+        <!-- 精简紧凑头部 -->
+        <div class="target-welcome-card">
+          <div>
+            <h1>串局 · <em>AI 智能点餐</em></h1>
+            <p>告诉人数、预算与忌口，即刻为您智能配桌</p>
+          </div>
+          <span class="badge mint" style="font-size: 9px;">试点 #3</span>
+        </div>
+
+        <div class="target-chat-card">
+          <div class="target-chat-messages">
+            <div class="chat-message assistant">
+              <div class="chat-avatar">AI</div>
+              <div class="chat-bubble target-chat-bubble">
+                你好！告诉我你们几个人、预算多少，有没有不吃辣、过敏或特别偏好？
+              </div>
+            </div>
+            <div class="chat-message user">
+              <div class="chat-avatar">我</div>
+              <div class="chat-bubble target-chat-bubble">
+                3个人，预算200元，其中1人不吃辣，推荐均衡烧烤搭配
+              </div>
+            </div>
+            <div class="chat-message assistant">
+              <div class="chat-avatar">AI</div>
+              <div class="chat-bubble target-chat-bubble" style="width: 100%;">
+                <div class="ai-msg-intro">为你推荐以下适合3人且兼顾不吃辣的均衡烧烤搭配：</div>
+                <div class="ai-list-card">
+                  <div class="ai-list-category">
+                    <span class="ai-list-category-icon">🔥</span>
+                    <span>推荐菜品搭配清单 (4品)</span>
+                  </div>
+                  <div class="ai-list-items">
+                    <div class="ai-list-item">
+                      <span class="ai-list-num">1</span>
+                      <div class="ai-list-content">
+                        <div class="ai-list-title-row">
+                          <span class="ai-list-title">
+                            招牌牛肉串
+                            <span class="ai-tag-pill tag-spec">10串</span>
+                            <span class="ai-tag-pill tag-orange">招牌</span>
+                          </span>
+                          <span class="ai-list-price">¥35</span>
+                        </div>
+                        <div class="ai-list-desc">黄牛肉现烤，鲜香多汁</div>
+                      </div>
+                    </div>
+                    <div class="ai-list-item">
+                      <span class="ai-list-num">2</span>
+                      <div class="ai-list-content">
+                        <div class="ai-list-title-row">
+                          <span class="ai-list-title">
+                            蜜汁烤鸡翅
+                            <span class="ai-tag-pill tag-spec">4串</span>
+                            <span class="ai-tag-pill tag-mint">免辣</span>
+                          </span>
+                          <span class="ai-list-price">¥24</span>
+                        </div>
+                        <div class="ai-list-desc">蜜汁甜咸适口，完全不辣</div>
+                      </div>
+                    </div>
+                    <div class="ai-list-item">
+                      <span class="ai-list-num">3</span>
+                      <div class="ai-list-content">
+                        <div class="ai-list-title-row">
+                          <span class="ai-list-title">
+                            炭烤大生蚝
+                            <span class="ai-tag-pill tag-spec">4只</span>
+                          </span>
+                          <span class="ai-list-price">¥32</span>
+                        </div>
+                        <div class="ai-list-desc">蒜蓉原味烤，鲜美多汁</div>
+                      </div>
+                    </div>
+                    <div class="ai-list-item">
+                      <span class="ai-list-num">4</span>
+                      <div class="ai-list-content">
+                        <div class="ai-list-title-row">
+                          <span class="ai-list-title">
+                            锡纸金针菇
+                            <span class="ai-tag-pill tag-spec">1份</span>
+                            <span class="ai-tag-pill tag-mint">免辣</span>
+                          </span>
+                          <span class="ai-list-price">¥16</span>
+                        </div>
+                        <div class="ai-list-desc">蒜香浓郁，解腻开胃</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ai-list-action-hint">轻触菜品可快捷引用沟通</div>
+                </div>
+                <div class="ai-msg-outro">
+                  💡 <strong>贴心建议</strong>：已为您留存预算余额约 ¥93，还可加选饮品或主食！
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-compose" style="padding-top: 10px;">
+            <textarea id="prompt" rows="2" style="font-size: 14px; min-height: 54px;" placeholder="例如：再加两份素菜或啤酒"></textarea>
+            <button type="button" class="send-button" style="width: 54px; height: 54px; font-size: 22px;">↑</button>
+          </div>
+          <div class="quick-actions" style="padding-top: 8px;">
+            <button class="chat-quick">3人均衡餐</button>
+            <button class="chat-quick">预算吃饱</button>
+            <button class="chat-quick">高蛋白少油</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

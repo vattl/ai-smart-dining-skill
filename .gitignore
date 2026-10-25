@@ -1,0 +1,7 @@
+.ai-runtime/
+.workbuddy/
+temp_remote_check/
+node_modules/
+*.log
+.DS_Store
+Thumbs.db

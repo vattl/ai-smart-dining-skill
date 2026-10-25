@@ -1,0 +1,18 @@
+{
+  "prototype": "design\\prototypes\\WI-006\\prototype.png",
+  "production": "design\\prototypes\\WI-006\\production.png",
+  "prototype_size": [
+    980,
+    1100
+  ],
+  "production_size": [
+    980,
+    1100
+  ],
+  "dimensions_match": true,
+  "changed_pixels": 399331,
+  "total_pixels": 1078000,
+  "changed_pixel_ratio": 0.3704369202226345,
+  "diff_bbox": null,
+  "note": "Raster ratio is diagnostic only; antialiasing/font rendering can produce harmless differences. Use AI/human visual review for acceptance."
+}

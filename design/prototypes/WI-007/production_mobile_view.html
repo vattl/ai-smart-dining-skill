@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>生产环境实际渲染 · 手机端大聊天页面 (WI-007)</title>
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body style="background: #f7f4ed; margin: 0; padding: 0;">
+  <div class="app-shell" style="min-height: 100vh;">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">串</span><div><strong>串局</strong><small>深圳烧烤 · AI 点餐</small></div></div>
+      <div class="top-actions">
+        <button type="button" class="history-toggle-btn">💬 历史 0</button>
+        <button type="button" class="new-chat-btn">➕ 新对话</button>
+        <span class="connection-dot"></span><span id="connectionText">就绪</span>
+      </div>
+    </header>
+
+    <main class="mobile-main">
+      <section class="welcome-card">
+        <div class="welcome-kicker">AI 智能点餐 · 试点门店 #3</div>
+        <h1>想吃什么，<em>直接告诉我</em></h1>
+        <p>说出人数、预算和忌口，AI 实时计算全桌搭配。</p>
+      </section>
+
+      <section class="chat-card">
+        <div id="chatMessages" class="chat-messages" aria-live="polite">
+          <div class="chat-message assistant">
+            <div class="chat-avatar">AI</div>
+            <div class="chat-bubble">你好！告诉我你们几个人、预算多少，有没有不吃辣、过敏或忌口？</div>
+          </div>
+          <div class="chat-message user">
+            <div class="chat-avatar">我</div>
+            <div class="chat-bubble">3个人，预算200元，其中1人不吃辣，推荐均衡烧烤搭配</div>
+          </div>
+          <div class="chat-message assistant">
+            <div class="chat-avatar">AI</div>
+            <div class="chat-bubble" id="targetListBubble" style="width: 100%;">
+              <!-- filled by formatAssistantReply -->
+            </div>
+          </div>
+        </div>
+        <div class="chat-compose">
+          <textarea id="prompt" rows="2" placeholder="例如：再加两份素菜或啤酒"></textarea>
+          <button type="button" id="sendBtn" class="send-button" aria-label="发送">↑</button>
+        </div>
+        <div class="quick-actions">
+          <button type="button" class="chat-quick">3人均衡餐</button>
+          <button type="button" class="chat-quick">预算吃饱</button>
+          <button type="button" class="chat-quick">高蛋白少油</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../../app.js"></script>
+  <script>
+    const sample = `为你推荐以下适合3人且兼顾不吃辣的均衡烧烤搭配：
+### 🔥 推荐菜品搭配清单 (4品)
+1. 招牌牛肉串 (10串) - ¥35 [招牌]：黄牛肉现烤，鲜香多汁
+2. 蜜汁烤鸡翅 (4串) - ¥24 [免辣]：蜜汁甜咸适口，完全不辣
+3. 炭烤大生蚝 (4只) - ¥32：蒜蓉原味烤，鲜美多汁
+4. 锡纸金针菇 (1份) - ¥16 [免辣]：蒜香浓郁，解腻开胃
+💡 建议：已为您整单核算约 ¥107，还可加选饮品或主食！`;
+    document.getElementById('targetListBubble').innerHTML = formatAssistantReply(sample);
+  </script>
+</body>
+</html>
