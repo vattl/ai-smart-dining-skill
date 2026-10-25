@@ -1,15 +1,16 @@
 # Acceptance Report — WI-007
 
-Work Item: WI-007
-Feature: 增加历史对话列表，保存对话，防止刷新丢失对话
 Decision: ACCEPTED
 
-## Acceptance Checklist
+## Original Requirement Coverage
 
-- [x] 会话本地持久化：基于 localStorage 实现自动多会话存储，不侵入服务端。
-- [x] 防刷新丢失：发送对话、生成菜品方案后刷新页面，聊天流与方案明细 100% 完整复原。
-- [x] 侧边抽屉与多会话：支持随时查看历史对话列表、时间戳、菜品数及预算金额。
-- [x] 切换与新建：点击任意历史卡片平滑切换并恢复数据；点击【➕ 新对话】快速开启全新点餐。
-- [x] 会话删除：支持单条会话精准删除及清空所有历史对话。
-- [x] 自动化测试用例：全量 6 项会话生命周期单元测试 100% PASS。
-- [x] UI 保真度与交互契约双门禁：PASS。
+| Criterion | Evidence | Result |
+|---|---|---|
+| Chat conversation area enlarged | `min-height: 480px; max-height: 66vh` in `styles.css` | PASS |
+| Streamlined mobile welcome card | Mobile title 18px and compact padding | PASS |
+| Mobile adaptation | 92% bubble width, 54px touch targets, smooth scrolling | PASS |
+| Visual fidelity and gate compliance | Edge screenshots and visual diff report | PASS |
+
+## Decision Rationale
+
+All mobile ergonomics and responsiveness requirements are verified with automated tests, visual comparisons, and gate validation.

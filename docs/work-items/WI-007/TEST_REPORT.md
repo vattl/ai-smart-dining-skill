@@ -8,16 +8,12 @@ Failed Required Checks: 0
 
 | Surface / Risk | Required Check | Result | Evidence |
 |---|---|---|---|
-| Initial Session Creation | `init()` creates default session when storage empty | PASS | `test_history_unit.js` |
-| Auto-persistence on Chat | User message and AI reply persisted to localStorage | PASS | `test_history_unit.js` |
-| Session Title Extraction | First user prompt summarized into session title | PASS | `test_history_unit.js` |
-| New Chat Isolation | `createNewSession` initializes clean state without erasing history | PASS | `test_history_unit.js` |
-| Session Switching | `switchSession` restores target chat history & plan | PASS | `test_history_unit.js` |
-| Session Deletion | `deleteSession` cleans target and re-indexes active | PASS | `test_history_unit.js` |
-| Refresh Recovery | Emulated reload restores active session with all messages | PASS | `test_history_unit.js` |
-| JavaScript syntax validity | `node --check app.js` | PASS | `node --check app.js` |
+| Mobile Viewport (390x844) | Chat area min-height >= 460px and bubble max-width 92% | PASS | `styles.css` inspection & screenshot |
+| Compact Mobile Viewport (375x667) | No horizontal overflow, header buttons flex gracefully | PASS | Visual screenshot & geometry verification |
+| Desktop Viewport (> 600px) | Max-width bounded at 560px, comfortable proportions | PASS | `styles.css` inspection |
 | UI gate compliance | Prototype review & visual fidelity | PASS | `validate_ui_fidelity.py` |
 | UI capability contract | Zero unresolved backend dependencies | PASS | `validate_ui_capabilities.py` |
+| Full regression suite | All existing tests pass | PASS | 36/36 tests |
 
 ## Environment / Browser / Device Matrix
 
@@ -27,4 +23,4 @@ Failed Required Checks: 0
 
 ## Flaky, Skipped and Pre-existing Failures
 
-None. All 6 tests passed deterministically.
+None.

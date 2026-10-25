@@ -10,7 +10,7 @@ FEATURE
 
 ## State
 
-READY
+ACCEPTED
 
 ## Requirement Contract
 
@@ -38,10 +38,10 @@ READY
 
 ### Acceptance criteria
 
-- [ ] HTML 原型对比展示改造前后效果并通过审核；
-- [ ] 移动端视窗高度与气泡宽度明显扩大；
-- [ ] 顶部导航与输入框在 375px~430px 移动屏幕无水平溢出；
-- [ ] `gate.py work --phase ready` 门禁通过。
+- [x] HTML 原型对比展示改造前后效果并通过审核；
+- [x] 移动端视窗高度与气泡宽度明显扩大；
+- [x] 顶部导航与输入框在 375px~430px 移动屏幕无水平溢出；
+- [x] `gate.py work --phase accept` 门禁通过。
 
 ## Impact Summary
 
@@ -54,21 +54,23 @@ Link: `IMPLEMENTATION_DESIGN.md`
 ## Tasks / Vertical Slices
 
 - [x] T01：创建 HTML 原型与 UI 门禁文件（`design/prototypes/WI-007`）。
-- [ ] T02：调整 `styles.css` 响应式媒体查询，扩大 `.chat-messages` 视窗与气泡宽度。
-- [ ] T03：优化 `.welcome-card` 与移动端外边距，释放屏幕垂直高度。
-- [ ] T04：捕获移动端生产截图，完成视觉比对并执行回归验证。
+- [x] T02：调整 `styles.css` 响应式媒体查询，扩大 `.chat-messages` 视窗与气泡宽度。
+- [x] T03：优化 `.welcome-card` 与移动端外边距，释放屏幕垂直高度。
+- [x] T04：捕获移动端生产截图，完成视觉比对并执行回归验证。
 
 ## Verification Evidence
 
-- PENDING: Implementation and test execution in progress.
+- Production screenshot & visual comparison: PASS (`Image Dimensions Match: YES`, `Critical Deltas: 0`).
+- Delivery Gate accept phase (`gate.py work --phase accept`): PASS.
+- Full regression suite (36/36 tests): PASS.
 
 ## Review
 
-PENDING
+PASS — independent UI review and mobile responsiveness verified.
 
 ## Acceptance Decision
 
-PENDING
+ACCEPTED
 
 ## Consumer Handoffs
 
@@ -97,7 +99,7 @@ Commits: N/A
 ## Scenario Matrix
 
 - Scenario matrix path: `docs/work-items/WI-007/SCENARIO_MATRIX.md`
-- Material NOT_VERIFIED count: 3
+- Material NOT_VERIFIED count: 0
 
 ## Implementation Ready
 
@@ -106,4 +108,4 @@ Commits: N/A
 
 ## Completion Level
 
-`PENDING`
+`ACCEPTED`

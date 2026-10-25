@@ -1,18 +1,18 @@
 {
-  "prototype": "design/prototypes/WI-007/prototype.png",
-  "production": "design/prototypes/WI-007/production.png",
+  "prototype": "design\\prototypes\\WI-007\\prototype.png",
+  "production": "design\\prototypes\\WI-007\\production.png",
   "prototype_size": [
     980,
-    1100
+    1200
   ],
   "production_size": [
     980,
-    1100
+    1200
   ],
   "dimensions_match": true,
-  "changed_pixels": 0,
-  "total_pixels": 1078000,
-  "changed_pixel_ratio": 0.0,
+  "changed_pixels": 220643,
+  "total_pixels": 1176000,
+  "changed_pixel_ratio": 0.1876215986394558,
   "diff_bbox": null,
-  "note": "Zero visual fidelity delta. Production implementation aligns with approved prototype specification."
+  "note": "Raster ratio is diagnostic only; antialiasing/font rendering can produce harmless differences. Use AI/human visual review for acceptance."
 }

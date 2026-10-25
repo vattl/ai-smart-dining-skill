@@ -11,23 +11,21 @@ DAST: NOT_APPLICABLE
 
 ## Assets and Trust Boundaries
 
-- Untrusted text from localStorage / external chat messages is processed by `escapeHtml` and `formatAssistantReply`.
-- All output text and interpolated values are processed through `escapeHtml` before inserting into DOM innerHTML.
-- Session keys `diancan_chat_sessions_v1` and `diancan_current_session_id` are scoped strictly to the origin domain.
+- CSS styling and responsive layout modifications only.
+- No new external scripts, libraries or network endpoints introduced.
+- Strict XSS protection in `app.js` is preserved.
 
 ## Abuse Cases Reviewed
 
-- **XSS via LocalStorage Manipulation**: Tested with malicious session titles containing `<script>alert(1)</script>` and `<img src=x onerror=...>`. Correctly escaped, preventing DOM execution.
-- **Quota Exceeded Handling**: Lightweight data model preserves only text, numbers, and plan summaries. Quota or JSON errors are caught gracefully.
-- **Data Cross-contamination**: Each session has an isolated UUID-like identifier `sess_<timestamp>_<rand>`.
+- Viewport overflow causing horizontal scrollbar or broken layouts: verified across 320px, 375px, 390px, and desktop.
+- Touch target overlap: buttons are sized 54px or padded with at least 40px hitboxes.
 
 ## Findings
 
-| ID | Severity | Finding | Resolution | Reverification |
-|---|---|---|---|---|
-| SEC-001 | LOW | Untrusted HTML injection in session title and drawer list | Implemented `escapeHtml` on all dynamic card titles and badges | Automated test PASS |
+None.
 
 ## Scan Evidence
 
-- Node.js syntax & unit test: PASS
+- Node.js syntax test: PASS
+- Full Python test suite: PASS
 - No secrets or credentials committed
