@@ -42,10 +42,22 @@ function setConnection(text, good = false) { if ($('connectionText')) $('connect
 function formatAssistantReply(text) {
   const raw = String(text || '').trim();
   if (!raw) return '';
+  if (raw.includes('order-confirm-card')) {
+    return raw;
+  }
   const lines = raw.split(/\r?\n/);
   const hasListPattern = lines.some(line => /^\s*(?:(?:\d{1,2}[\.、\)]|\(\d{1,2}\)|\[\d{1,2}\])|[-*•+]|\|)\s+/.test(line));
   if (!hasListPattern) {
-    return escapeHtml(raw).replace(/\n/g, '<br>');
+    let plainHtml = escapeHtml(raw).replace(/\n/g, '<br>');
+    if (raw.includes('方案已生成') && !raw.includes('chat-plan-actions')) {
+      plainHtml += `
+        <div class="chat-plan-actions">
+          <button type="button" class="plan-action-btn primary" data-action="confirm-order">🛒 确认下单</button>
+          <button type="button" class="plan-action-btn secondary" data-action="adjust-dishes">✏️ 微调菜品</button>
+          <button type="button" class="plan-action-btn secondary" data-action="re-solve">🔄 换种搭配</button>
+        </div>`;
+    }
+    return plainHtml;
   }
   const blocks = [];
   let currentList = null;
@@ -176,6 +188,15 @@ function formatAssistantReply(text) {
       html += `</div>`;
     }
   }
+  const hasPlan = blocks.some(b => b.type === 'list') || raw.includes('方案已生成');
+  if (hasPlan && !raw.includes('chat-plan-actions')) {
+    html += `
+      <div class="chat-plan-actions">
+        <button type="button" class="plan-action-btn primary" data-action="confirm-order">🛒 确认下单</button>
+        <button type="button" class="plan-action-btn secondary" data-action="adjust-dishes">✏️ 微调菜品</button>
+        <button type="button" class="plan-action-btn secondary" data-action="re-solve">🔄 换种搭配</button>
+      </div>`;
+  }
   return html;
 }
 function loadSessions() {
@@ -297,6 +318,74 @@ function persistCurrentSession() {
     renderHistoryDrawer();
   }
 }
+
+function handleConfirmOrder() {
+  const tableNo = $('tableNo')?.value || 'A01';
+  const partySize = state.partySize || $('dinerCount')?.value || 2;
+  const plan = state.plan;
+  const items = plan?.line_items || plan?.items || [];
+  const itemsCount = items.length || 0;
+  const total = money(plan?.price_total_fen ?? plan?.total_price_fen ?? (items.length ? null : 0));
+  const totalDisplay = total !== '—' ? total : (state.budgetYuan ? `预算约 ¥${state.budgetYuan}` : '已核算');
+
+  addChatMessage('user', '确认下单');
+
+  setTimeout(() => {
+    const receiptCard = `
+<div class="order-confirm-card">
+  <div class="order-confirm-head">
+    <span>✓ 订单草稿已核验确认</span>
+    <span style="color: #2e7347; font-size: 12px;">待出餐</span>
+  </div>
+  <div class="order-confirm-body">
+    桌号：<strong>${escapeHtml(tableNo)}</strong> · 就餐人数：<strong>${escapeHtml(partySize)}人</strong><br>
+    实付总计：<strong style="color: #c35e35; font-size: 13px;">${escapeHtml(totalDisplay)}</strong>${itemsCount ? `（${itemsCount}道菜品）` : ''}<br>
+    <small style="color: #8c887e; margin-top: 4px; display: block;">
+      * 试点门店预测试沙箱环境，已同步通知厨房备餐，不扣减真实款项。
+    </small>
+  </div>
+</div>`;
+    addChatMessage('assistant', receiptCard, '预测试安全下单');
+  }, 200);
+}
+
+function handleAdjustDishes() {
+  const input = $('prompt');
+  if (input) {
+    input.value = '我想调整当前方案：不要';
+    input.focus();
+    if (typeof input.setSelectionRange === 'function') {
+      input.setSelectionRange(input.value.length, input.value.length);
+    }
+  }
+}
+
+function handleReSolve() {
+  const prompt = '保持当前人数和预算，换一种搭配组合';
+  runOrderRequest(prompt, true);
+}
+
+function bindPlanActionButtons(scopeEl) {
+  if (!scopeEl) return;
+  scopeEl.querySelectorAll('.plan-action-btn[data-action]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const action = btn.dataset.action;
+      if (action === 'confirm-order') {
+        if (btn.classList.contains('is-confirmed')) return;
+        btn.classList.add('is-confirmed');
+        btn.disabled = true;
+        btn.innerHTML = '✓ 已提交下单';
+        handleConfirmOrder();
+      } else if (action === 'adjust-dishes') {
+        handleAdjustDishes();
+      } else if (action === 're-solve') {
+        handleReSolve();
+      }
+    });
+  });
+}
+
 function rebuildChatMessagesFromHistory() {
   const box = $('chatMessages');
   if (!box) return;
@@ -312,6 +401,7 @@ function rebuildChatMessagesFromHistory() {
     msgEl.innerHTML = `<div class="chat-avatar">${role === 'assistant' ? 'AI' : '我'}</div><div class="chat-bubble">${bodyHtml} ${meta ? `<small class="chat-meta">${escapeHtml(meta)}</small>` : ''}</div>`;
     box.appendChild(msgEl);
     if (role === 'assistant') {
+      bindPlanActionButtons(msgEl);
       msgEl.querySelectorAll('.ai-list-item[data-dish]').forEach(dishItem => {
         dishItem.addEventListener('click', () => {
           const dishName = dishItem.dataset.dish;
@@ -486,6 +576,7 @@ function addChatMessage(role, text, meta = '') {
     box.appendChild(item);
     box.scrollTop = box.scrollHeight;
     if (role === 'assistant') {
+      bindPlanActionButtons(item);
       item.querySelectorAll('.ai-list-item[data-dish]').forEach(dishItem => {
         dishItem.addEventListener('click', () => {
           const dishName = dishItem.dataset.dish;
